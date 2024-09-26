@@ -1,0 +1,20 @@
+-- Select domains that are currently registered and do not have an active EXPIRED flag
+SELECT d.domain_name
+FROM domain d
+LEFT JOIN domain_flag df ON d.domain_name = df.domain_name
+  AND df.flag_name = 'EXPIRED'
+  AND df.valid_to IS NULL
+WHERE d.unregistered_at IS NULL
+  AND df.id IS NULL;
+
+-- Select domains that have had active EXPIRED and OUTZONE flags in the past
+SELECT domain_name
+FROM domain_flag
+WHERE flag_name = 'EXPIRED'
+  AND valid_to IS NOT NULL -- Ensure the EXPIRED flag was active in the past
+INTERSECT
+SELECT domain_name
+FROM domain_flag
+WHERE flag_name = 'OUTZONE'
+  AND valid_to IS NOT NULL; -- Ensure the OUTZONE flag was active in the past
+

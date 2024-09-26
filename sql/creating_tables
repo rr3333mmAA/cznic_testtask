@@ -1,0 +1,22 @@
+-- Create table for domains
+CREATE TABLE domain (
+    domain_name VARCHAR(255) PRIMARY KEY,
+    registered_at TIMESTAMPTZ NOT NULL,
+    unregistered_at TIMESTAMPTZ,
+    CHECK (unregistered_at IS NULL OR unregistered_at > registered_at),
+    UNIQUE (domain_name, registered_at, unregistered_at)
+);
+
+-- Create table for domain flags
+CREATE TABLE domain_flag (
+    id SERIAL PRIMARY KEY,
+    domain_name VARCHAR(255) REFERENCES domain(domain_name),
+    flag_name VARCHAR(20) NOT NULL,
+    valid_from TIMESTAMPTZ NOT NULL,
+    valid_to TIMESTAMPTZ,
+    CHECK (valid_to IS NULL OR valid_to > valid_from)
+);
+
+-- Create index for querying active flags
+CREATE INDEX idx_domain_flag_active ON domain_flag(domain_name, flag_name)
+WHERE valid_to IS NULL;

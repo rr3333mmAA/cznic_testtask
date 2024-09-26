@@ -1,0 +1,12 @@
+-- Insert test domains
+INSERT INTO domain (domain_name, registered_at, unregistered_at)
+VALUES
+('example.com', '2024-01-01 10:00:00', NULL),
+('example.org', '2024-01-01 11:00:00', '2024-01-01 11:00:00');
+
+-- Insert test flags
+INSERT INTO domain_flag (domain_name, flag_name, valid_from, valid_to)
+VALUES
+('example.com', 'EXPIRED', '2024-06-01 00:00:00', NULL),
+('example.org', 'EXPIRED', '2024-06-01 00:00:00', '2024-12-31 00:00:00'),
+('example.org', 'OUTZONE', '2024-07-01 00:00:00', '2024-12-31 00:00:00');
